@@ -17,6 +17,9 @@ import com.example.a0103pr1519.data.Users;
 import com.example.a0103pr1519.data_base.DataBaseManager;
 import com.example.a0103pr1519.databinding.FragmentKabinetBinding;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.ObjIntConsumer;
 
@@ -49,6 +52,22 @@ public class KabinetFragment extends Fragment {
             if (ordersList.get(i).getIdUser() != user.getId())
                 ordersList.remove(i);
         }
+        ordersList.sort(new Comparator<Orders>() {
+            @Override
+            public int compare(Orders o1, Orders o2) {
+                return Integer.compare(Integer.parseInt(o1.getDate().split("\\.")[2]), Integer.parseInt(o2.getDate().split("\\.")[2]));
+            }
+        }.thenComparing(new Comparator<Orders>() {
+            @Override
+            public int compare(Orders o1, Orders o2) {
+                return Integer.compare(Integer.parseInt(o1.getDate().split("\\.")[1]), Integer.parseInt(o2.getDate().split("\\.")[1]));
+            }
+        }).thenComparing(new Comparator<Orders>() {
+            @Override
+            public int compare(Orders o1, Orders o2) {
+                return Integer.compare(Integer.parseInt(o1.getDate().split("\\.")[0]), Integer.parseInt(o2.getDate().split("\\.")[0]));
+            }
+        }));
         OrderAdapter orderAdapter = new OrderAdapter(getContext(), ordersList);
         binding.recyclerViewOrders.setAdapter(orderAdapter);
         binding.textViewName.append("\n" + user.getFirstName());
